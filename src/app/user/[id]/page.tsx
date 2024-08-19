@@ -61,22 +61,41 @@ const page = async ({ searchParams, params }: {
     const session = await auth()
     const sessionIdString = session?.user?.id?.toString() 
 
+    console.log("client", id);
+    if (data.user) console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    console.log("client", data.user);
+
   return (
     <>
-    <div className='p-4 flex flex-col items-center'>
-      <img 
-        src={!!data.user[0].image ? data.user[0].image : "https://res.cloudinary.com/djliadbvy/image/upload/v1721024991/uo02rbkhegkiwym6kplw.png"} 
-        alt="profile image" 
-        className='w-32 rounded-lg'
-      />
-      {sessionIdString === id && <EditProfile session={session}/> }
-      <div className='pt-3'>{data.user[0].name}</div>
-    </div>
-    <div>
-      <div className='flex justify-center pt-3 text-xl'>Content</div>
-      <BetterFeed productData={data.products}/> 
-      <PaginationContainer totalPages={data.total_pages} currentPage={Number(page)} route={`/user/${id}`}/>
-    </div>
+      {!data.user[0] ? (
+        <div className='p-4 flex flex-col items-center'>
+          <img 
+            src={"https://res.cloudinary.com/djliadbvy/image/upload/v1721024991/uo02rbkhegkiwym6kplw.png"} 
+            alt="profile image" 
+            className='w-32 rounded-lg'
+          />
+          <h1 className='pt-3'>User not found</h1>
+        </div>
+      )
+      : (
+        <>
+        <div className='p-4 flex flex-col items-center'>
+          <img 
+            src={!!data.user[0].image ? data.user[0].image : "https://res.cloudinary.com/djliadbvy/image/upload/v1721024991/uo02rbkhegkiwym6kplw.png"} 
+            alt="profile image" 
+            className='w-32 rounded-lg'
+          />
+          {sessionIdString === id && <EditProfile session={session}/> }
+          <div className='pt-3'>{data.user[0].name}</div>
+        </div>
+        <div>
+          <div className='flex justify-center pt-3 text-xl'>Content</div>
+          <BetterFeed productData={data.products}/> 
+          <PaginationContainer totalPages={data.total_pages} currentPage={Number(page)} route={`/user/${id}`}/>
+        </div>
+        </>
+      )
+      }
     </>
   )
 }

@@ -27,6 +27,7 @@ export async function GET(req: Request) {
         WHERE
             id = ${id}
         `
+        console.log("server", id);
         const userProducts = await sql`
         SELECT 
             p.*,

@@ -36,7 +36,7 @@ const BetterFeed = async ({ productData }: Props) => {
 
   return (
     <section className="md:mx-auto md:max-w-screen-xl m-4 border">
-        <div className="md:grid md:grid-cols-4 md:m-auto md:max-w-screen-2xl border">
+        <div className="md:grid md:grid-cols-4 md:m-auto md:max-w-screen-2xl ">
         {productData?.map((product:productDataType) => {
             return <Card title={product.title} description={product.description} price={product.price} images={product.images} product_id={product.product_id} displayViewProduct={true} key={product.product_id}/>
           })}

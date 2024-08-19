@@ -32,11 +32,11 @@ const page = async ({ searchParams }: {
   
   let page = searchParams['page'] ?? '1' 
   const data = await getData(page)
-  
+
   return (
     <>
     <div className='text-center py-4'><u>Preview</u></div>
-    {!data.user[0] ? (
+    {!data?.user?.[0] ? (
       <div className='p-4 flex flex-col items-center'>
       <img 
         src={"https://res.cloudinary.com/djliadbvy/image/upload/v1721024991/uo02rbkhegkiwym6kplw.png"} 

@@ -61,13 +61,9 @@ const page = async ({ searchParams, params }: {
     const session = await auth()
     const sessionIdString = session?.user?.id?.toString() 
 
-    console.log("client", id);
-    if (data.user) console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    console.log("client", data.user);
-
   return (
     <>
-      {!data.user[0] ? (
+      {!data?.user?.[0] ? (
         <div className='p-4 flex flex-col items-center'>
           <img 
             src={"https://res.cloudinary.com/djliadbvy/image/upload/v1721024991/uo02rbkhegkiwym6kplw.png"} 

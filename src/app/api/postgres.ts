@@ -1,23 +1,23 @@
 // Neon serverless database connection
 
-// import { neon } from '@neondatabase/serverless';
-// const sql = neon(process.env.DATABASE_URL!);
+import { neon } from '@neondatabase/serverless';
+const sql = neon(process.env.DATABASE_URL!);
 
 // _____________________________________________
 // Neon regular database connection
 
-import postgres from 'postgres'
+// import postgres from 'postgres'
 
-let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
+// let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 
-const sql = postgres({
-      host: PGHOST,
-      database: PGDATABASE,
-      username: PGUSER,
-      password: PGPASSWORD,
-      port: 5432,
-      ssl: 'require',
-    });
+// const sql = postgres({
+//       host: PGHOST,
+//       database: PGDATABASE,
+//       username: PGUSER,
+//       password: PGPASSWORD,
+//       port: 5432,
+//       ssl: 'require',
+//     });
     
     // _____________________________________________
     // Local postgres database connection

@@ -12,10 +12,17 @@ import {
 } from "@/components/ui/dialog"
 import { Avatar } from '@/components/ui/avatar';
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { auth } from "@/auth"
+
+
+import EditProductMenu from '@/components/EditProductMenu';
+
 
 type imageObject = {
   id: number
   image: string
+  public_id: string
+  order: number
 }
 type tagObject = {
   id: number
@@ -56,19 +63,30 @@ const page = async ({ params }: {
   const dataArray = await getData(id)
   const data:productDataType = dataArray[0]
 
+  const session = await auth()
+
   return (
     <>
         <section className='px-2 md:max-w-screen-lg mx-auto pt-2'>
-          <div className='flex items-center'>
-            <Avatar>
-              <AvatarImage src={data.user_image} />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div className='text-sm font-medium pl-2'>By 
-              <Link href={`/user/${data.user_id}`}>
-                <span className='text-sm font-medium text-cyan-600 cursor-pointer'> {data.user}</span>
-              </Link>
+          <div className='flex justify-between'>
+            <div className='flex items-center'>
+              <Avatar>
+                <AvatarImage src={data.user_image} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className='text-sm font-medium pl-2'>By 
+                <Link href={`/user/${data.user_id}`}>
+                  <span className='text-sm font-medium text-cyan-600 cursor-pointer'> {data.user}</span>
+                </Link>
+              </div>
             </div>
+            {!!session && Number(session?.user?.id) === data.fk_users_id ? 
+            (
+              <div className='flex items-center'>
+                <EditProductMenu product_user_id={data.fk_users_id} images={data.images} product_id={data.product_id}/>
+              </div>
+            ) : null
+            }
           </div>
           <div className='aspect-square w-full pt-4 md:max-w-lg md:mx-auto'>
               <ImageSlider styles='w-full border-b pb-2' images={data.images} product_id={data.product_id} imageLink={false}/>

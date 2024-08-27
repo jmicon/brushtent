@@ -6,6 +6,7 @@ import { ClientSessionProvider } from "./client-session-provider";
 import Nav from "@/components/Nav";
 
 // import SessionWrapper from "../components/SessionWrapper";
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         <body className={inter.className}>
           <Nav />
           {children}
+          <Toaster />
         </body>
       </html>
     </ClientSessionProvider>

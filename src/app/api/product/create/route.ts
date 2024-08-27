@@ -46,6 +46,7 @@ export const POST = auth(async function POST(req) {
             // checks if file is less than 10mb
             let base64String = imageArray[image].substring(imageArray[image].indexOf(',') + 1)
             let kb = Math.ceil( ( (base64String.length * 6) / 8) / 1000 );        
+            console.log(image,": ",kb);
             if (kb > 10000) return Response.json({error: "An image cannot be larger than 10mb"}, { status: 400 })
     
         }
@@ -80,7 +81,8 @@ export const POST = auth(async function POST(req) {
         let downloadFile
         let filePublicId
         if (file instanceof File) {
-            const uniqueFileName = `${uuidv4()}${file.name}`;
+            const random = (Math.random() + 1).toString(36).substring(6)
+            const uniqueFileName = `${random}${file.name}`;
             const fileBuffer = await file.arrayBuffer();
             const fileStream = Buffer.from(fileBuffer);
       
@@ -101,7 +103,7 @@ export const POST = auth(async function POST(req) {
                     (product_download_link, public_id, FK_product_id)
                 VALUES
                     (${downloadFile}, ${filePublicId}, ${newProductId})
-                RETURNING *
+                RETURNING *;
                 `
                 // console.log(newProductDownload);
               }
@@ -115,7 +117,9 @@ export const POST = auth(async function POST(req) {
             (title, description, price, fk_users_id) 
         VALUES 
             (${title}, ${description}, 0, ${user.id})
-        RETURNING *`
+        RETURNING *;
+        `
+        // console.log(newProduct)
     
         const newProductId = newProduct[0].product_id
     
@@ -132,28 +136,29 @@ export const POST = auth(async function POST(req) {
             }
             // console.log(tagsInsert)
     
-            const newTags = await sql`INSERT INTO tag ${ sql(tagsInsert) } RETURNING *`
+            const newTags = await sql`INSERT INTO tag ${ sql(tagsInsert) } RETURNING *;`
             // console.log(newTags)
         } 
     
         // Upload image links to Database
         const imageInsert:any = []
+        console.log(imageList);
         for (let image in imageList) {
             let imageValue = {
                 product_image: imageList[image],
                 public_id: publicIdList[image],
                 fk_product_id: newProductId,
-                order: Number(image) + 1
+                order: Number(image)
             }
             imageInsert.push(imageValue)
         }
-        const newImages = await sql`INSERT INTO product_image ${ sql(imageInsert) } RETURNING *`
+        const newImages = await sql`INSERT INTO product_image ${ sql(imageInsert) } RETURNING *;`
         // console.log(newImages)
         
-        return Response.json('success')
+        return Response.json('Uploaded')
     
     } catch (error: any) {
         console.log(error.message)
-        return Response.json({error: error.message})
+        return Response.json({error: error.message}, {status: 400})
     }
 })

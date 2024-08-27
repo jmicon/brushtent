@@ -19,7 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-
+import { Menu } from 'lucide-react';
 type Props = {
   session?: any
 }
@@ -28,17 +28,19 @@ const MobileDropMenu = ({ session }: Props) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
+      <Menu />
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Navigation</SheetTitle>
         </SheetHeader>
         <div className="flex flex-col justify-center bg- gap-4 py-8 ">
-            <Button variant="outline" asChild>
-              <Link href={`/upload`}>Upload Content</Link>
-            </Button>
-
+        <SheetClose asChild>
+          <Button variant="outline" asChild>
+            <Link href={`/upload`}>Upload Content</Link>
+          </Button>
+        </SheetClose>
+        <SheetClose asChild>
           <Button variant="outline" asChild>
           {!session 
           ? 
@@ -48,19 +50,23 @@ const MobileDropMenu = ({ session }: Props) => {
             <Link href={`/user/${session.userId}`}>My Profile</Link>
           }
           </Button>
+        </SheetClose>
 
+        <SheetClose asChild>
           {!session 
-        ? 
-          (
-            <Button asChild>
-            <SignInClientButton />
-            </Button>
-          )
-        :
-          (
-            <SignOutClient />
-          )
-        }
+          ? 
+            (
+              <Button asChild>
+              <SignInClientButton />
+              </Button>
+            )
+          :
+            (
+              <SignOutClient />
+            )
+          }
+        </SheetClose>
+
 
         </div>
         <SheetFooter>

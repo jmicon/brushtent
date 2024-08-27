@@ -18,7 +18,7 @@ export async function GET(req: Request) {
             product.fk_users_id,
             product.upload_time,
             jsonb_agg(DISTINCT jsonb_build_object('id', tag.tag_id, 'tag', tag.title)) AS tags,
-            jsonb_agg(DISTINCT jsonb_build_object('id', ordered_images.product_image_id, 'image', ordered_images.product_image)) AS images,
+            jsonb_agg(DISTINCT jsonb_build_object('id', ordered_images.product_image_id, 'image', ordered_images.product_image, 'public_id', ordered_images.public_id, 'order', ordered_images.order)) AS images,
             jsonb_agg(DISTINCT product_download.product_download_link) AS download,
             users.id AS user_id,
             users."name" AS user,
@@ -45,7 +45,7 @@ export async function GET(req: Request) {
             product.product_id,
             users.id 
         HAVING
-            product.product_id = ${id}
+            product.product_id = ${id};
         `
         return Response.json(product)
         

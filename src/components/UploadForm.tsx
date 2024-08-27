@@ -19,7 +19,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 // import { Description } from "@radix-ui/react-dialog"
 // import { blob } from "stream/consumers"
-
+import { useToast } from "@/components/ui/use-toast"
+import { Loader2 } from "lucide-react"
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -109,6 +110,9 @@ type Props = {}
 
 const UploadForm = (props: Props) => {
     const [images, setImages] = useState<string[]>()
+    const [loading, setLoading] = useState(false)
+
+    const { toast } = useToast()
 
     const convertToBase64 = (imageFile:File) => {
         const reader = new FileReader()
@@ -171,6 +175,8 @@ const UploadForm = (props: Props) => {
         formData.append("description", values.description)
         formData.append("tags", cleanTagsString)
         formData.append("images", imagesString)  
+
+        setLoading(true)
     
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/product/create`, {
             method: "POST",
@@ -179,10 +185,21 @@ const UploadForm = (props: Props) => {
         if (!response.ok) {
             const errorResponse = await response.json()
             console.log(errorResponse);
-          }
-          const responseMessage = response.json()
-          console.log(responseMessage)
-      
+            console.log("error");
+            if (typeof errorResponse.error === "string") {
+                toast({
+                    description: `Error: ${errorResponse.error}`
+                })
+            }
+            
+        } else {
+            const responseMessage = response.json()
+            console.log(responseMessage)
+              toast({
+                description: "Successfully uploaded"
+              })
+        }
+        setLoading(false)
       }    
 
     const imageRef = form.register("images");
@@ -201,9 +218,6 @@ const UploadForm = (props: Props) => {
                 <FormControl>
                 <Input placeholder="Your title" {...field} />
                 </FormControl>
-                <FormDescription>
-                This is your public display name.
-                </FormDescription>
                 <FormMessage />
             </FormItem>
             )}
@@ -218,9 +232,6 @@ const UploadForm = (props: Props) => {
                 <Textarea {...field}/>
                 {/* <Input placeholder="shadcn" {...field} /> */}
                 </FormControl>
-                <FormDescription>
-                This is your public display name.
-                </FormDescription>
                 <FormMessage />
             </FormItem>
             )}
@@ -236,7 +247,7 @@ const UploadForm = (props: Props) => {
                 {/* <Input placeholder="shadcn" {...field} /> */}
                 </FormControl>
                 <FormDescription>
-                This is your public display name.
+                Tags can influence where you show in search results.
                 </FormDescription>
                 <FormMessage />
             </FormItem>
@@ -274,7 +285,15 @@ const UploadForm = (props: Props) => {
             </FormItem>
             )}
             />
-        <Button type="submit">Create</Button>
+
+        {!loading ? <Button type="submit">Create</Button>
+        : (
+            <Button disabled>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+            </Button>
+        )    
+    }
         </form>
     </Form>
   )

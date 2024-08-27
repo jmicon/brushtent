@@ -12,7 +12,7 @@ export async function GET(req: Request) {
         if (isNaN(pageNumber)) return Response.json({error: "page number value is invalid"})
 
         // Determines the number of items per page
-        const limit = 3
+        const limit = 8
         const offset = (pageNumber - 1) * limit
 
         const products = await sql`
@@ -55,7 +55,7 @@ export async function GET(req: Request) {
             user_image.user_image_id
         ORDER BY 
             product.upload_time DESC
-        LIMIT ${limit} OFFSET ${offset}
+        LIMIT ${limit} OFFSET ${offset};
         `
 
         const totalPages = await sql`

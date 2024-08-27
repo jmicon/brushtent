@@ -27,7 +27,7 @@ export const PUT = auth(async function PUT(req) {
         UPDATE users 
         SET name = ${name}
         WHERE id = ${id}
-        RETURNING users.name
+        RETURNING users.name;
         `
         if (!image) return Response.json(updatedUserName)
 
@@ -46,7 +46,7 @@ export const PUT = auth(async function PUT(req) {
         UPDATE users 
         SET image = ${updatedImage}
         WHERE id = ${id}
-        RETURNING users.image
+        RETURNING users.image;
         `
         return Response.json({updated_name: updatedUserName, updated_image: updatedUserImage})
     

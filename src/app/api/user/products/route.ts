@@ -5,7 +5,7 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url)
         // unique user identifier
         const id = searchParams.get('id')
-        if (!id) return Response.json({error: "url contains no id"})
+        if (!id) return Response.json({error: "url contains no id", status: 400})
         
         let pageNumberString = searchParams.get('page') // ?page=1
         let pageNumber = Number(pageNumberString)
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
         if (!pageNumberString) pageNumber = 1
         if (pageNumber <= 0 || isNaN(pageNumber)) pageNumber = 1
         // check if pageNumber is a number
-        if (isNaN(pageNumber)) return Response.json({error: "page number value is invalid"})
+        if (isNaN(pageNumber)) return Response.json({error: "page number value is invalid", status: 400})
 
         // Determines the number of items per page
         const limit = 8
@@ -25,8 +25,9 @@ export async function GET(req: Request) {
         FROM
             users
         WHERE
-            id = ${id}
+            users.id = ${id};
         `
+
         const userProducts = await sql`
         SELECT 
             p.*,
@@ -49,7 +50,7 @@ export async function GET(req: Request) {
             p.fk_users_id = ${id}
         ORDER BY 
             p.upload_time DESC
-        LIMIT ${limit} OFFSET ${offset}
+        LIMIT ${limit} OFFSET ${offset};
         `
         
         const totalPages = await sql`
@@ -57,9 +58,9 @@ export async function GET(req: Request) {
         FROM 
             product
         WHERE
-            product.fk_users_id = ${id}
+            product.fk_users_id = ${id};
         `
-        
+        // console.log(userProducts);
         return Response.json({ user: userData, products: userProducts, total_pages: totalPages[0].total_pages })
         
     } catch (error: any) {

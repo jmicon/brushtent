@@ -32,7 +32,7 @@ type data = {
 
 const getData = async (userId:string, page:string) => {
   try {
-    const response = await axios.get(`${process.env.API_URL}/api/user/products`, {
+    const response = await axios.get(`/api/user/products`, {
       params: {
         id: userId,
         page: page
@@ -60,6 +60,7 @@ const page = async ({ searchParams, params }: {
     const data = await getData(id, page)
     const session = await auth()
     const sessionIdString = session?.user?.id?.toString() 
+    console.log(session);
 
   return (
     <>

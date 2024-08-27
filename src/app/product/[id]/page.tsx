@@ -46,7 +46,7 @@ type productDataType = {
 }
 
 async function getData ( id: string) {
-  const res = await fetch(`${process.env.API_URL}/api/product/get/one?id=${id}`, {
+  const res = await fetch(`/api/product/get/one?id=${id}`, {
     headers: {
       "Content-Type": "application/json",
     },

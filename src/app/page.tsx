@@ -15,7 +15,7 @@ export default async function Home({ searchParams }: {
   return (
     <main>
       <NextUIProvider>
-        <Feed searchParams={searchParams} endpoint={`${process.env.API_URL}/api/product/get/all?page=`} />
+        <Feed searchParams={searchParams} endpoint={`/api/product/get/all?page=`} />
 
     </NextUIProvider>
 

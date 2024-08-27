@@ -94,7 +94,7 @@ const UploadComponent = () => {
 
     formData.append("test", JSON.stringify(['1','2','3']))  
     
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/product/create`, {
+    const response = await fetch(`/api/product/create`, {
       method: "POST",
       body: formData
     })

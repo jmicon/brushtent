@@ -1,19 +1,20 @@
-// pages/api/product/get/all.ts
-import sql from "@/app/api/postgres";
+import sql from "@/app/api/postgres"
+import { NextResponse } from 'next/server'
 
 export async function GET(req: Request) {
+    const { searchParams } = new URL(req.url)
+    let pageNumberString = searchParams.get('page') // ?page=1
+    let pageNumber = Number(pageNumberString)
     try {
-        const { searchParams } = new URL(req.url);
-        let pageNumberString = searchParams.get('page'); // ?page=1
-        let pageNumber = Number(pageNumberString);
         // if pageNumberString is null, default to first page
-        if (!pageNumberString) pageNumber = 1;
+        if (!pageNumberString) pageNumber = 1
+        if (pageNumber <= 0 || isNaN(pageNumber)) pageNumber = 1
         // check if pageNumber is a number
-        if (pageNumber <= 0 || isNaN(pageNumber)) pageNumber = 1;
+        if (isNaN(pageNumber)) return Response.json({error: "page number value is invalid"})
 
         // Determines the number of items per page
-        const limit = 8;
-        const offset = (pageNumber - 1) * limit;
+        const limit = 8
+        const offset = (pageNumber - 1) * limit
 
         const products = await sql`
         SELECT 
@@ -56,19 +57,15 @@ export async function GET(req: Request) {
         ORDER BY 
             product.upload_time DESC
         LIMIT ${limit} OFFSET ${offset};
-        `;
+        `
 
         const totalPages = await sql`
         SELECT CEIL(COUNT(*)::NUMERIC / ${limit}) AS total_pages
         FROM product;
-        `;
-
-        return new Response(JSON.stringify({ products, total_pages: totalPages[0].total_pages }));
-
+        `
+        return Response.json({products, total_pages: totalPages[0].total_pages})
+        
     } catch (error: any) {
-        return new Response(JSON.stringify({ error: error.message }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return Response.json({error: error.message})
     }
 }

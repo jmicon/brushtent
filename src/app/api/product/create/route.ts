@@ -5,18 +5,18 @@ import { auth } from "@/auth"
 import { NextResponse } from "next/server"
 
 export const POST = auth(async function POST(req) {
-    try {
-        if (!req.auth) return Response.json({error: "You are not logged in"}, { status: 401 })
-        if (!req.auth.user) return Response.json({error: "You were authenticated, but your user object does not exist"}, { status: 401 })
-        const user = req.auth.user
+    if (!req.auth) return Response.json({error: "You are not logged in"}, { status: 401 })
+    if (!req.auth.user) return Response.json({error: "You were authenticated, but your user object does not exist"}, { status: 401 })
+    const user = req.auth.user
 
-        const formData = await req.formData();
-    
-        const title = formData.get('title') as string
-        const description = formData.get('description') as string
-        const tags = formData.get('tags') as string
-        const images = formData.get('images') as string
-        const file = formData.get('file')
+    const formData = await req.formData();
+
+    const title = formData.get('title') as string
+    const description = formData.get('description') as string
+    const tags = formData.get('tags') as string
+    const images = formData.get('images') as string
+    const file = formData.get('file')
+    try {
         
         // Convert strings to the desired data type
         const imageArray = await JSON.parse(images)

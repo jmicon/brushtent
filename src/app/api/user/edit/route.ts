@@ -7,15 +7,15 @@ import { NextResponse } from "next/server"
 
 // Create new prodcut row, include a title, information, price (free paid not supported yet), generate date, list of images, list of tags, default user, user download id
 export const PUT = auth(async function PUT(req) {
-    try {
-        if (!req.auth) return Response.json({error: "You are not logged in"}, { status: 401 })
-        if (!req.auth.user) return Response.json({error: "You were authenticated, but your user object does not exist"}, { status: 401 })
+    if (!req.auth) return Response.json({error: "You are not logged in"}, { status: 401 })
+    if (!req.auth.user) return Response.json({error: "You were authenticated, but your user object does not exist"}, { status: 401 })
 
-        const user = req.auth.user
-        const id = user?.id
-        const data = await req.json();
-        const name = data.name
-        const image = data.image
+    const user = req.auth.user
+    const id = user?.id
+    const data = await req.json();
+    const name = data.name
+    const image = data.image
+    try {
 
         if (!image && !name) return Response.json({message: "No changes made"})
 

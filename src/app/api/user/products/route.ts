@@ -1,14 +1,14 @@
 import sql from "@/app/api/postgres"
 
 export async function GET(req: Request) {
+    const { searchParams } = new URL(req.url)
+    // unique user identifier
+    const id = searchParams.get('id')
+    if (!id) return Response.json({error: "url contains no id", status: 400})
+    
+    let pageNumberString = searchParams.get('page') // ?page=1
+    let pageNumber = Number(pageNumberString)
     try {
-        const { searchParams } = new URL(req.url)
-        // unique user identifier
-        const id = searchParams.get('id')
-        if (!id) return Response.json({error: "url contains no id", status: 400})
-        
-        let pageNumberString = searchParams.get('page') // ?page=1
-        let pageNumber = Number(pageNumberString)
         // if pageNumberString is null, default to first page
         if (!pageNumberString) pageNumber = 1
         if (pageNumber <= 0 || isNaN(pageNumber)) pageNumber = 1

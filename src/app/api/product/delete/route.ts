@@ -5,21 +5,22 @@ import { auth } from "@/auth"
 // authenticate, match the user id to the product's fk user id, delete images from cloudinary, 
 
 export const DELETE = auth(async function DELETE(req) {
-    try {
-        if (!req.auth) return Response.json({error: "You are not logged in"}, { status: 401 })
-            
-        // get authenticated user id 
-        const tempCurrentUserId = req.auth?.user?.id
-        const currentUserId = Number(tempCurrentUserId)
-        // get product and user id that are attached to product
-        const { searchParams } = new URL(req.url)
-        const productId = searchParams.get('product_id')
-        const productUserId = Number(searchParams.get('user_id'))
-        // get the array of image objects for the public_id's
-        const { imagesData } = await req.json()
+    if (!req.auth) return Response.json({error: "You are not logged in"}, { status: 401 })
+        
+    // get authenticated user id 
+    const tempCurrentUserId = req.auth?.user?.id
+    const currentUserId = Number(tempCurrentUserId)
+    // get product and user id that are attached to product
+    const { searchParams } = new URL(req.url)
+    const productId = searchParams.get('product_id')
+    const productUserId = Number(searchParams.get('user_id'))
+    // get the array of image objects for the public_id's
+    const { imagesData } = await req.json()
 
-        // Check if the authenticated user is the owner of the product
-        if (currentUserId !== productUserId) return Response.json({Error: "You are not authorized to make this change."})
+    // Check if the authenticated user is the owner of the product
+    if (currentUserId !== productUserId) return Response.json({Error: "You are not authorized to make this change."})
+        
+    try {
 
         // delete product images from cloudinary (different way of doing it)
         // const images = await sql`

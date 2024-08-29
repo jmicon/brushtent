@@ -47,7 +47,7 @@ const EditProductMenu = ({ product_user_id, product_id, images }: Props) => {
         }
         console.log(publicIdList);
         console.log(images);
-        const res = await fetch(`/api/product/delete?user_id=${product_user_id}&product_id=${product_id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/product/delete?user_id=${product_user_id}&product_id=${product_id}`, {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json",

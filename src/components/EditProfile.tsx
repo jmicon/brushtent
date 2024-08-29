@@ -62,7 +62,7 @@ const EditProfile = ({ session }: Props) => {
 
     const submitChanges = async () => {
        
-        const response = await fetch(`/api/user/edit`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/edit`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json', // Make sure to include content-type header

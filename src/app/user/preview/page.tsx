@@ -8,7 +8,7 @@ import EditProfilePreview from '@/components/EditProfilePreview'
 
 const getData = async (page:string) => {
   try {
-    const response = await axios.get(`/api/user/products`, {
+    const response = await axios.get(`${process.env.API_URL}/api/user/products`, {
       params: {
         id: 1,
         page: page

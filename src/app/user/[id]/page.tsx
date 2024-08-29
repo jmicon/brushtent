@@ -32,7 +32,7 @@ type data = {
 
 const getData = async (userId:string, page:string) => {
   try {
-    const response = await axios.get(`/api/user/products`, {
+    const response = await axios.get(`${process.env.API_URL}/api/user/products`, {
       params: {
         id: userId,
         page: page

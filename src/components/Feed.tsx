@@ -37,7 +37,7 @@ type productDataType = {
 
 async function getData (pageParam:string, endpoint:string, userId?:string) {
   try {
-    const response = await axios.get(`/api/product/get/all`, {
+    const response = await axios.get(`${process.env.API_URL}/api/product/get/all`, {
       params: {
         id: userId,
         page: pageParam

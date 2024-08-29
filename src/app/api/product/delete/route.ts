@@ -1,5 +1,4 @@
 import sql from "@/app/api/postgres"
-// @ts-ignore
 import {v2 as cloudinary} from 'cloudinary';
 import { auth } from "@/auth"
 

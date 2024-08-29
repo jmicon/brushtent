@@ -1,4 +1,3 @@
-// @ts-ignore
 import {v2 as cloudinary} from 'cloudinary';
 import { v4 as uuidv4 } from 'uuid';
 import sql from "@/app/api/postgres"

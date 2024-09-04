@@ -169,8 +169,6 @@ const UploadForm = (props: Props) => {
 
         const cleanTagsString = cleanTags(values.tags)
 
-        console.log(imagesString);
-
         const formData = new FormData()
         formData.append("file", values.file[0])
         formData.append("title", values.title)
@@ -182,6 +180,9 @@ const UploadForm = (props: Props) => {
     
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/product/create`, {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: formData
         })
         if (!response.ok) {

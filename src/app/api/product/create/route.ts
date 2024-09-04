@@ -38,7 +38,7 @@ export const POST = auth(async function POST(req) {
     
         // return error if files are unwanted 
         if (imageArray.length > 5) return Response.json({error: "You cannot upload more than 5 images"}, { status: 400 })
-        if (tagArray.length > 10) return Response.json({error: "You cannot have more than 10 tags"}, { status: 400 })
+        if (tagArray.length > 20) return Response.json({error: "You cannot have more than 20 tags"}, { status: 400 })
         for (let image in imageArray) {
             // checks if file is an image
             if (!imageArray[image].startsWith('data:image/')) return Response.json({ error: 'Uploaded files must be images' }, { status: 400 }) 
@@ -76,6 +76,20 @@ export const POST = auth(async function POST(req) {
             publicIdList.push(cloudinaryImageResult.public_id)
         }
 
+        
+        if (!user.id) return Response.json({error: "User ID cannot be undefined"}, { status: 400 })
+        const newProduct = await sql`
+        INSERT INTO product 
+            (title, description, price, fk_users_id) 
+        VALUES 
+            (${title}, ${description}, 0, ${user.id})
+        RETURNING *;
+        `
+        // console.log(newProduct)
+    
+        const newProductId = newProduct[0].product_id
+    
+
         // upload downloadable file to cloudinary
         let downloadFile
         let filePublicId
@@ -110,18 +124,6 @@ export const POST = auth(async function POST(req) {
             .end(fileStream);
           }
 
-        if (!user.id) return Response.json({error: "User ID cannot be undefined"}, { status: 400 })
-        const newProduct = await sql`
-        INSERT INTO product 
-            (title, description, price, fk_users_id) 
-        VALUES 
-            (${title}, ${description}, 0, ${user.id})
-        RETURNING *;
-        `
-        // console.log(newProduct)
-    
-        const newProductId = newProduct[0].product_id
-    
         // Upload tags to Database
         // check if there are any tags and skip INSERTING them if there are 0
         if (isTags) {

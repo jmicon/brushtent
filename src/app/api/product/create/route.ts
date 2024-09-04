@@ -154,13 +154,8 @@ export const POST = auth(async function POST(req) {
         const newImages = await sql`INSERT INTO product_image ${ sql(imageInsert) } RETURNING *;`
         // console.log(newImages)
         
-        return new Response(JSON.stringify({ message: "Uploaded" }), {
-            status: 200,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-            
+        return Response.json({message: "Uploaded"})
+    
     } catch (error: any) {
         console.log(error.message)
         return Response.json({error: error.message}, {status: 400})

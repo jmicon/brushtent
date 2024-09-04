@@ -178,28 +178,32 @@ const UploadForm = (props: Props) => {
 
         setLoading(true)
     
-        const response = await fetch(`/api/product/create`, {
-            method: "POST",
-            body: formData
-        })
-        if (!response.ok) {
-            const errorResponse = await response.json()
-            console.log(errorResponse);
-            console.log("error");
-            if (typeof errorResponse.error === "string") {
-                toast({
-                    description: `Error: ${errorResponse.error}`
-                })
+        try {
+            const response = await fetch(`/api/product/create`, {
+                method: "POST",
+                body: formData
+            })
+            if (!response.ok) {
+                const errorResponse = await response.json()
+                console.log(errorResponse);
+                console.log("error");
+                if (typeof errorResponse.error === "string") {
+                    toast({
+                        description: `Error: ${errorResponse.error}`
+                    })
+                }
+            } else {
+                const responseMessage = response.json()
+                console.log(responseMessage)
+                  toast({
+                    description: "Successfully uploaded"
+                  })
             }
-            
-        } else {
-            const responseMessage = response.json()
-            console.log(responseMessage)
-              toast({
-                description: "Successfully uploaded"
-              })
+        } catch (error) {
+            console.log(error);            
+        } finally {
+            setLoading(false)            
         }
-        setLoading(false)
       }    
 
     const imageRef = form.register("images");

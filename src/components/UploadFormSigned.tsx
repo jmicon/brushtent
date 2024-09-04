@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { CldUploadWidget } from 'next-cloudinary';
+
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -78,38 +80,12 @@ const formSchema = z.object({
             message: "Include at least 1 image.",
         })
     }
-  }),
-  file: z.instanceof(FileList).optional()
-  .superRefine((val, ctx) => {
-    if (!!val) {
-        for (const [key, value] of Object.entries(val)) {
-            if (value.size > 10000000) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.too_big,
-                    maximum: 3,
-                    type: "array",
-                    inclusive: true,
-                    message: "File is larger than 10mb.",
-                })
-            }
-        }
-    }
-    if (val?.length === 0) {
-        ctx.addIssue({
-            code: z.ZodIssueCode.too_big,
-            maximum: 3,
-            type: "array",
-            inclusive: true,
-            message: "Include a file.",
-        })
-    }
   })
 })
 
-type Props = {}
-
-const UploadForm = (props: Props) => {
+const UploadFormSigned = () => {
     const [images, setImages] = useState<string[]>()
+    const [resource, setResource] = useState<any>(null)
     const [loading, setLoading] = useState(false)
 
     const { toast } = useToast()
@@ -152,7 +128,6 @@ const UploadForm = (props: Props) => {
             description: "",
             tags: "",
             images: undefined,
-            file: undefined
         },
       })
 
@@ -162,7 +137,6 @@ const UploadForm = (props: Props) => {
 
         // if (!values.file || !values.images) return 
         
-        if (typeof values.file === 'undefined') return   
         if (typeof values.images === 'undefined') return 
         
         const imagesString = JSON.stringify(images)
@@ -170,7 +144,8 @@ const UploadForm = (props: Props) => {
         const cleanTagsString = cleanTags(values.tags)
 
         const formData = new FormData()
-        formData.append("file", values.file[0])
+        formData.append('file_secure_url', resource.secure_url)
+        formData.append('file_public_id', resource.public_id)
         formData.append("title", values.title)
         formData.append("description", values.description)
         formData.append("tags", cleanTagsString)
@@ -179,7 +154,7 @@ const UploadForm = (props: Props) => {
         setLoading(true)
     
         try {
-            const response = await fetch(`/api/product/create`, {
+            const response = await fetch(`/api/product/create/test`, {
                 method: "POST",
                 body: formData
             })
@@ -210,7 +185,6 @@ const UploadForm = (props: Props) => {
       }    
 
     const imageRef = form.register("images");
-    const fileRef = form.register("file");
 
     
   return (
@@ -276,22 +250,29 @@ const UploadForm = (props: Props) => {
             </FormItem>
             )}
             />
-        <FormField
-            control={form.control}
-            name="file"
-            render={({ field }) => (
-                <FormItem>
-                <FormLabel>File</FormLabel>
-                <FormControl>
-                <Input id="picture" type="file" {...fileRef} />
-                </FormControl>
-                <FormDescription>
-                Include your brush file.
-                </FormDescription>
-                <FormMessage />
-            </FormItem>
-            )}
-            />
+            <div>
+                <FormLabel>Upload your download file</FormLabel>
+                <div className="pt-2">
+                    <CldUploadWidget 
+                        uploadPreset="abr_upload" 
+                        signatureEndpoint="/api/product/create/sign-cloudinary-params"
+                        onSuccess={(result, { widget }) => {
+                            setResource(result?.info)
+                            console.log(result?.info);
+                        }}
+                    >
+                    {({ open }) => {
+                        
+                        return (
+                        <div onClick={() => open()} className="border w-full text-left py-3 px-4 text-sm rounded-lg duration-250 cursor-default">
+                            <span className="font-light font-">Browse...&nbsp;&nbsp;</span>
+                            {!resource ? <span>No file selected.</span> : <span> {resource.public_id.substring(14)}</span>}
+                        </div>
+                        );
+                    }}
+                    </CldUploadWidget>
+                </div>
+            </div>
 
         {!loading ? <Button type="submit">Create</Button>
         : (
@@ -306,4 +287,4 @@ const UploadForm = (props: Props) => {
   )
 }
 
-export default UploadForm
+export default UploadFormSigned

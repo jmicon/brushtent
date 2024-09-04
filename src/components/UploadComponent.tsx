@@ -96,9 +96,6 @@ const UploadComponent = () => {
     
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/product/create`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: formData
     })
     if (!response.ok) {

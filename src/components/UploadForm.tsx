@@ -180,9 +180,6 @@ const UploadForm = (props: Props) => {
     
         const response = await fetch(`/api/product/create`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
             body: formData
         })
         if (!response.ok) {

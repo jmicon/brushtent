@@ -16,10 +16,10 @@ export const POST = auth(async function POST(req) {
     const tags = formData.get('tags') as string
     const images = formData.get('images') as string
     const file = formData.get('file')
+    const imageArray = await JSON.parse(images)
     try {
         
         // Convert strings to the desired data type
-        const imageArray = await JSON.parse(images)
         const tagArray = tags.split(',')
     
         // Cleaning tags (removing spaces) and checking if there are tags

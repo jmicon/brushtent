@@ -178,7 +178,7 @@ const UploadForm = (props: Props) => {
 
         setLoading(true)
     
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/product/create`, {
+        const response = await fetch(`/api/product/create`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -20,7 +20,7 @@ import { useState } from "react"
 // import { Description } from "@radix-ui/react-dialog"
 // import { blob } from "stream/consumers"
 import { useToast } from "@/components/ui/use-toast"
-import { Loader2 } from "lucide-react"
+import { CloudFog, Loader2 } from "lucide-react"
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -168,6 +168,8 @@ const UploadForm = (props: Props) => {
         const imagesString = JSON.stringify(images)
 
         const cleanTagsString = cleanTags(values.tags)
+
+        console.log(imagesString);
 
         const formData = new FormData()
         formData.append("file", values.file[0])

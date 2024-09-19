@@ -1,4 +1,4 @@
-[delete flow.webm](https://github.com/user-attachments/assets/3176c84d-7c26-41e1-b9a6-dc22e048e875)# Brushtent
+# Brushtent
 Brushtent is an online platform designed for users to share and discover Photoshop brush files. 
 
 ## Features
@@ -10,7 +10,7 @@ Brushtent is an online platform designed for users to share and discover Photosh
 - **Frontend & Backend**: Next.js
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **Database**: PostgreSQL using [Postgres.js](https://github.com/porsager/postgres) for ORM
+- **Database**: PostgreSQL using [Postgres.js](https://github.com/porsager/postgres) and [Neon](https://neon.tech)
 - **Authentication**: [Auth.js](https://authjs.dev)
 
 ## Design Decisions
